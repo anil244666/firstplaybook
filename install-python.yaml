@@ -1,6 +1,6 @@
 ---
 - name: Install Python on servers
-  hosts: all
+  hosts: ec2-user
   become: yes
 
   tasks:
