@@ -1,6 +1,6 @@
 ---
 - name: Install Python on servers
-  hosts: webservers
+  hosts: all
   become: yes
 
   tasks:
