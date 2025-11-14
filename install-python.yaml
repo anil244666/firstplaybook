@@ -1,0 +1,30 @@
+---
+- name: Install Python on servers
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Update package list
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Python3 (Debian/Ubuntu)
+      apt:
+        name: python3
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Python3 (RedHat/CentOS)
+      yum:
+        name: python3
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Verify Python installation
+      command: python3 --version
+      register: python_version
+
+    - name: Show Python version
+      debug:
+        msg: "Installed Python version is {{ python_version.stdout }}"
