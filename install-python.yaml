@@ -28,3 +28,10 @@
     - name: Show Python version
       debug:
         msg: "Installed Python version is {{ python_version.stdout }}"
+    - name: Deploy index.html to web root
+      copy:
+        src: index.html          # <-- source file in your project dir
+        dest: "{{ doc_root }}/index.html"
+        owner: root
+        group: root
+        mode: '0644'
