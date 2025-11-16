@@ -1,10 +1,10 @@
----
-- name: Install Python on servers
-  hosts: ec2-user
+- name: Setup Python and Web Server
+  hosts: webservers
   become: yes
 
   tasks:
-    - name: Update package list
+    # --- Python installation ---
+    - name: Update package list (Debian/Ubuntu)
       apt:
         update_cache: yes
       when: ansible_os_family == "Debian"
@@ -24,11 +24,12 @@
     - name: Verify Python installation
       command: python3 --version
       register: python_version
-- name: Setup web server and deploy page
-  hosts: webservers
-  become: yes
 
-  tasks:
+    - name: Show Python version
+      debug:
+        msg: "Installed Python version is {{ python_version.stdout }}"
+
+    # --- Apache installation ---
     - name: Install Apache (Debian/Ubuntu)
       apt:
         name: apache2
