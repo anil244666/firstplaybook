@@ -4,22 +4,17 @@
 
   tasks:
     # --- Python installation ---
-    - name: Update package list (Debian/Ubuntu)
-      apt:
-        update_cache: yes
-      when: ansible_os_family == "Debian"
+    - name: Install Python3 (RedHat/CentOS)
+      yum:
+        name: python3
+        state: present
+      when: ansible_os_family == "RedHat"
 
     - name: Install Python3 (Debian/Ubuntu)
       apt:
         name: python3
         state: present
       when: ansible_os_family == "Debian"
-
-    - name: Install Python3 (RedHat/CentOS)
-      yum:
-        name: python3
-        state: present
-      when: ansible_os_family == "RedHat"
 
     - name: Verify Python installation
       command: python3 --version
