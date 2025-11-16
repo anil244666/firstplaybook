@@ -24,14 +24,29 @@
     - name: Verify Python installation
       command: python3 --version
       register: python_version
+- name: Install Apache (Debian/Ubuntu)
+  apt:
+    name: apache2
+    state: present
+  when: ansible_os_family == "Debian"
 
-    - name: Show Python version
-      debug:
-        msg: "Installed Python version is {{ python_version.stdout }}"
-    - name: Deploy index.html to web root
-      copy:
-        src: index.html          # <-- source file in your project dir
-        dest: "{{ doc_root }}/index.html"
-        owner: root
-        group: root
-        mode: '0644'
+- name: Install Apache (RedHat/CentOS)
+  yum:
+    name: httpd
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure Apache is running
+  service:
+    name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+    state: started
+    enabled: yes
+
+- name: Deploy index.html to web root
+  copy:
+    src: index.html
+    dest: "{{ '/var/www/html/index.html' if ansible_os_family == 'Debian' else '/var/www/html/index.html' }}"
+    owner: root
+    group: root
+    mode: '0644'
+
